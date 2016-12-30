@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>2-D shapes Bridget CHA science fair</title>
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+		<!-- needed for display of 2d image --> 
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+		<script>
+			var container;
+			var camera, scene, renderer;
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			init();
+			render();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.set( 0, 150, 500 );
+
+				function addShape( shape, color, x, y, z) {
+
+					// flat shape
+					var geometry = new THREE.ShapeGeometry( shape );
+					var material = new THREE.MeshBasicMaterial( { color: color } );
+					var mesh = new THREE.Mesh( geometry, material );
+					mesh.position.set( x, y, z );
+					scene.add( mesh );
+
+					// line around shape
+					var geometry = shape.createPointsGeometry();
+					geometry.vertices.push( geometry.vertices[ 0 ].clone() );
+					var material = new THREE.LineBasicMaterial( 
+											{ linewidth: 10, color: 'black' } );
+					var line = new THREE.Line( geometry, material );
+					line.position.set( x, y, z );
+					scene.add( line );
+				}
+
+				// Triangle
+				var triangleShape = new THREE.Shape();
+				triangleShape.moveTo(  80, 20 );
+				triangleShape.lineTo(  40, 80 );
+				triangleShape.lineTo( 120, 80 );
+				triangleShape.lineTo(  80, 20 ); // close path
+
+				// Square
+				var sqLength = 80;
+				var squareShape = new THREE.Shape();
+				squareShape.moveTo( 0,0 );
+				squareShape.lineTo( 0, sqLength );
+				squareShape.lineTo( sqLength, sqLength );
+				squareShape.lineTo( sqLength, 0 );
+				squareShape.lineTo( 0, 0 );
+
+				// Rectangle
+				var rectLength = 120, rectWidth = 40;
+				var rectShape = new THREE.Shape();
+				rectShape.moveTo( 0,0 );
+				rectShape.lineTo( 0, rectWidth );
+				rectShape.lineTo( rectLength, rectWidth );
+				rectShape.lineTo( rectLength, 0 );
+				rectShape.lineTo( 0, 0 );
+
+				// Circle
+				var radius = 50;
+				var circleShape = new THREE.Shape();
+				circleShape.moveTo( 0, radius );
+				circleShape.quadraticCurveTo( radius, radius, radius, 0 );
+				circleShape.quadraticCurveTo( radius, -radius, 0, -radius );
+				circleShape.quadraticCurveTo( -radius, -radius, -radius, 0 );
+				circleShape.quadraticCurveTo( -radius, radius, 0, radius );
+
+				addShape( triangleShape, 'red', -180, 0, 0 );
+				addShape( squareShape, 'cyan', -40, 220, 0 );
+				addShape( circleShape, 'greenyellow', -100, 250, 0 );
+				addShape( rectShape, 'ivory', -100, 120, 0 );
+				
+				// create renderer
+				renderer = new THREE.CanvasRenderer();
+				renderer.setClearColor( 0xf0f0f0 ); // background color - light gray
+				renderer.setPixelRatio( window.devicePixelRatio ); // lines too big without this
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+ 
+				// resize if window size changes
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+ 
+			function onWindowResize() {
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function render() {
+				renderer.render( scene, camera );
+			}
+
+		</script>
+	</body>
+</html>

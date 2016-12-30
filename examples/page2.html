@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>2-D Shapes Bridget CHA Science Fair</title>
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+		<script>
+			var container;
+			var camera, scene, renderer;
+
+			function addShape( shape, c, x, y, z) {
+				// flat shape
+				var geometry = new THREE.ShapeGeometry( shape );
+				var material = new THREE.MeshBasicMaterial( { color: c } );
+				var mesh = new THREE.Mesh( geometry, material );
+				mesh.position.set( x, y, z );
+				scene.add( mesh );
+			}
+
+			// Triangle
+			var triangleShape = new THREE.Shape();
+			triangleShape.moveTo(  80, 20 ); 
+			triangleShape.lineTo(  40, 80 );
+			triangleShape.lineTo( 120, 80 );
+			triangleShape.lineTo(  80, 20 ); // close path
+
+			addShape( triangleShape, 'red', -180, 0, 0 );
+			
+			// create renderer
+			renderer = new THREE.CanvasRenderer();
+ 
+			render();
+
+			function render() {
+				renderer.render( scene, camera );
+			}
+		</script>
+	</body>
+</html>

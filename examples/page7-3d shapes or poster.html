@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Bridget 3-D Shapes Science Fair</title>
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+		<script>
+			var container;
+			var camera, scene, renderer;
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera( );
+				camera.position.set( -200, 5, -10 ); // where the camera is looking from
+				scene.add( camera );
+
+				var light = new THREE.DirectionalLight( 'white', 1);
+				light.position.set( -1, 2, 1 ); // where light is pointed
+				light.castShadow= true;
+				scene.add( light );
+
+				// add window - bottom row
+				var geoCube = new THREE.BoxGeometry( 5, 4, 6 ); // size of window 5x4x6
+				var matCube= new THREE.MeshPhongMaterial( { color: 'teal' } );
+				var cube = new THREE.Mesh( geoCube, matCube );
+				cube.position.set(15,9,35); // location of window
+				scene.add( cube );
+
+				// add sun
+				var geoSphere= new THREE.SphereGeometry( 10, 70, 64 ); // size of sun
+				var matSphere= new THREE.MeshPhongMaterial( { color: 'yellow' } );
+				var sphere = new THREE.Mesh( geoSphere, matSphere );
+				sphere.position.set( 100, 90, 90); // location of sun
+				scene.add( sphere );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				
+				container.appendChild( renderer.domElement );
+			}
+
+			function animate() {
+				requestAnimationFrame( animate );
+				render();
+			}
+
+			function render() {
+				renderer.render( scene, camera );
+			}
+		</script>
+	</body>
+</html>
